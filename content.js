@@ -1,3 +1,35 @@
+/* Add an informative message to indicate that the extension for this site is on */
+(function () {
+  // Create a new message element
+  const messageDiv = document.createElement("div");
+  messageDiv.className = "my-extension-banner";
+
+  // The message's text
+  const textSpan = document.createElement("span");
+
+  // The message's text
+  const messageHTML = `🟢 התוסף שלי לסינון המשרות פעיל.`;
+
+  textSpan.innerHTML = messageHTML;
+
+  // Closing button
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "×";
+  closeBtn.className = "my-extension-close";
+
+  // Add a closing event
+  closeBtn.addEventListener("click", () => {
+    messageDiv.remove();
+  });
+
+  // Add the elements to the message
+  messageDiv.appendChild(textSpan);
+  messageDiv.appendChild(closeBtn);
+
+  // Add the message to the page
+  document.body.appendChild(messageDiv);
+})();
+
 (function () {
   // -----------------------------
   // Flags
@@ -38,7 +70,9 @@
   const hideVIPJobs = () => {
     const jobs = document.querySelectorAll(".job-box");
     jobs.forEach((job) => {
-      const vipIcon = job.querySelector(".job-content-top-vip img[src*='vip-job-icon.png']");
+      const vipIcon = job.querySelector(
+        ".job-content-top-vip img[src*='vip-job-icon.png']"
+      );
       if (vipIcon) {
         job.style.display = "none";
       }
@@ -56,7 +90,7 @@
       /לפחות\s*\d+\s*שנות\s*ניסיון/i,
       /לפחות\s*\d+\s*שנים.*Angular/i,
       /\b\d+-\d+\+?\s*years.*mandatory/i,
-      /\d+\+?\s*years of experience/i
+      /\d+\+?\s*years of experience/i,
     ];
 
     jobs.forEach((job) => {
@@ -79,7 +113,10 @@
     const jobs = document.querySelectorAll(".job-content-top");
     jobs.forEach((job) => {
       const appliedLabel = job.querySelector(".job-content-top-jobmissed");
-      if (appliedLabel && appliedLabel.innerText.includes("טרם הגשת מועמדות") === false) {
+      if (
+        appliedLabel &&
+        appliedLabel.innerText.includes("טרם הגשת מועמדות") === false
+      ) {
         job.style.border = "2px solid green";
         job.style.backgroundColor = "#e6ffed";
       }
