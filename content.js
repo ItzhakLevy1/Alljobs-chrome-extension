@@ -85,20 +85,43 @@
   const filterJobsByExperienceAndDegree = () => {
     const jobs = document.querySelectorAll(".job-box");
 
-    const excludeRegexes = [
-      /ניסיון\s*של\s*מעל\s*\d+\s*שנים/i,
-      /לפחות\s*\d+\s*שנות\s*ניסיון/i,
-      /לפחות\s*\d+\s*שנים.*Angular/i,
-      /\b\d+-\d+\+?\s*years.*mandatory/i,
-      /\d+\+?\s*years of experience/i,
-    ];
+    // Keywords indicating high experience (2+ years) in Hebrew
+    const highExpWordsHeb = /שנתיים|שלוש|ארבע|חמש|שש|שבע|שמונה|תשע|עשר|תריסר|נוסף|מוכח/i;
+    
+    // Whitelist: Expressions representing 1 year or less (Keep these jobs)
+    const juniorFriendlyRegex = /(שנת ניסיון אחת|שנה ניסיון|ללא ניסיון|0-1 שנים|1-2 שנות ניסיון|one year|1 year|no experience|junior|ג'וניור)/i;
+
+    // Regex to identify numerical experience (e.g., 2+, 3-5, 5 years)
+    const highExpNumbers = /(\d+)\s*(?:\+|שנים|years|שנות)/i;
 
     jobs.forEach((job) => {
       const desc = job.innerText;
-      const shouldHideExperience = excludeRegexes.some((r) => r.test(desc));
-      const shouldHideDegree = /תואר/i.test(desc) || /degree/i.test(desc);
+      let shouldHide = false;
 
-      if (shouldHideExperience || shouldHideDegree) {
+      // 1. Check for degree requirements
+      const hasDegreeRequirement = /תואר/i.test(desc) || /degree/i.test(desc);
+
+      // 2. Check for "Junior-friendly" whitelist keywords
+      const isJuniorFriendly = juniorFriendlyRegex.test(desc);
+
+      if (!isJuniorFriendly) {
+        // 3. Check for experience keywords (Hebrew words for numbers)
+        if (highExpWordsHeb.test(desc)) {
+          shouldHide = true;
+        }
+
+        // 4. Check for numerical experience values > 1
+        const numMatch = desc.match(highExpNumbers);
+        if (numMatch) {
+          const years = parseInt(numMatch[1], 10);
+          if (years > 1) {
+            shouldHide = true;
+          }
+        }
+      }
+
+      // Apply filtering logic
+      if (shouldHide || hasDegreeRequirement) {
         job.style.display = "none";
       } else if (job.style.display !== "none") {
         job.style.display = "block";
