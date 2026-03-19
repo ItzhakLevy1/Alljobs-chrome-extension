@@ -8,7 +8,7 @@
   const textSpan = document.createElement("span");
 
   // The message's text
-  const messageHTML = `🟢 התוסף שלי לסינון המשרות פעיל.`;
+  const messageHTML = `🟢 התוסף שלי לסינון המשרות פעיל.<br>מוצגות רק משרות עם דרישה של פחות משנתיים ניסיון וללא תואר.`;
 
   textSpan.innerHTML = messageHTML;
 
